@@ -2,6 +2,7 @@
 
 namespace Vlad\JobTest;
 
+use Decimal\Decimal;
 use Vlad\JobTest\Types\Transaction;
 
 class FileHandler
@@ -56,8 +57,9 @@ class FileHandler
 
     public static function echoCommissions(array $commissions) : void
     {
+        /** @var Decimal $commission */
         foreach ($commissions as $commission) {
-            echo $commission . "\n";
+            echo $commission->toString() . "\n";
         }
     }
 }

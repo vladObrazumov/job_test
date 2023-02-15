@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Decimal\Decimal;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Vlad\JobTest\BinService;
@@ -21,9 +22,9 @@ final class CommissionCalculatorTest extends TestCase
     }
 
     #[DataProvider('roundUpProvider')]
-    public function testRoundUp(float $a, float $expected)
+    public function testRoundUp(float $value, float $expected)
     {
-        $this->assertSame($expected, CommissionCalculator::roundUp($a));
+        $this->assertEquals((new Decimal((string) $expected)), CommissionCalculator::roundUp(new Decimal((string) $value)));
     }
 
     public static function roundUpProvider(): array
@@ -70,17 +71,17 @@ final class CommissionCalculatorTest extends TestCase
 
         $commissionCalculator = new CommissionCalculator($exchangeRateServiceMock, $binServiceMock);
 
-        $this->assertSame([
-            1.0,
-            2.0,
-            5.56,
-            0.47,
-            0.94,
-            1.88,
-            1.41,
-            2.44,
-            45.24,
-            22.62,
+        $this->assertEquals([
+            new Decimal((string) 1.0),
+            new Decimal((string) 2.0),
+            new Decimal((string) 5.56),
+            new Decimal((string) 0.47),
+            new Decimal((string) 0.94),
+            new Decimal((string) 1.88),
+            new Decimal((string) 1.41),
+            new Decimal((string) 2.44),
+            new Decimal((string) 45.24),
+            new Decimal((string) 22.62),
         ], $commissionCalculator->calculateCommissions([
             new Transaction("45717360",100.00,"EUR"),
             new Transaction("45717360",200.00,"EUR"),
