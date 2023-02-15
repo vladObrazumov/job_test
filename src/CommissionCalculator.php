@@ -52,6 +52,7 @@ class CommissionCalculator
 
     public static function roundUp(float $value): float
     {
+        //better to use decimal type if possible
         //we cant use ceil($value * 100) / 100 because 77.4 become to 77.41
         $correctedValue = $value > round($value,2) ? $value + 0.01 : $value;
         return round($correctedValue, 2);
