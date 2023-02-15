@@ -2,7 +2,6 @@
 
 namespace Vlad\JobTest;
 use Vlad\JobTest\Types\Transaction;
-use Decimal\Decimal;
 
 class CommissionCalculator
 {
@@ -37,9 +36,7 @@ class CommissionCalculator
             }
 
             $binCountry = $countryCodes[$transaction->getBin()];
-            $commissionAmount = $amountFixed * (self::isEu($binCountry) ? 0.01 : 0.02);
-            $commission = new Decimal((string) $commissionAmount, 20);
-            $result[] = self::roundUp($commission);
+            $result[] = $this->roundUp($amountFixed * ($this->isEu($binCountry) ? 0.01 : 0.02));
         }
 
         return $result;
@@ -53,8 +50,11 @@ class CommissionCalculator
         return false;
     }
 
-    public static function roundUp(Decimal $value): Decimal
+    public static function roundUp(float $value): float
     {
-        return $value->round(2, Decimal::ROUND_UP);
+        //better to use decimal type if possible
+        //we cant use ceil($value * 100) / 100 because 77.4 become to 77.41
+        $correctedValue = $value > round($value,2) ? $value + 0.01 : $value;
+        return round($correctedValue, 2);
     }
 }
